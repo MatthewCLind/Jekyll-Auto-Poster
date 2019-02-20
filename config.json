@@ -1,0 +1,12 @@
+{
+	"site_root_path":"/absolute/path/to/your/jekyll/root",
+	"front_matter":{"layout":"post",
+			"anything:"youwant"},
+	"SFTP":
+	{
+		"hostname":"your-hostname",
+		"username":"your-sftp-user",
+		"password":"your-sftp-password",
+		"put_path":"/remote/directory/to/put/site"
+	}
+}
