@@ -1,7 +1,7 @@
 {
 	"site_root_path":"/absolute/path/to/your/jekyll/root",
 	"front_matter":{"layout":"post",
-			"anything:"youwant"},
+			"anything":"youwant"},
 	"SFTP":
 	{
 		"hostname":"your-hostname",
