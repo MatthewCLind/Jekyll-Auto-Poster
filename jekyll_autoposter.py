@@ -3,6 +3,8 @@ import json
 import random
 from datetime import date
 import pysftp
+from time import sleep
+
 
 dates = str(date.today())
 
@@ -12,20 +14,34 @@ with open('config.json','r') as f:
 # line of code from stackoverflow.com/a/40347279 
 directories = [f.name for f in os.scandir('.') if f.is_dir()]
 
-print(directories)
-
 if len(directories) == 0:
     print('there is nothing here to post')
     raise SystemExit(0)
 
-next_post_title = random.choice(directories)
+priority = None
+p_level = -1
+for directory in directories:
+    if directory[0:8] == "PRIORITY":
+        level = int(directory[8:10])
+        if(level > p_level):
+            priority = directory[11:]
+
+if priority is not None:
+    next_post_title = priority
+else:
+    next_post_title = random.choice(directories)
 
 os.chdir('./' + next_post_title)
 
 new_post_path = config['site_root_path'] + '/_posts/' + dates
-new_assets_path = config['site_root_path'] + '/assets/' + next_post_title
 
-os.mkdir(new_assets_path)
+
+# Only create an assets directory if there are assets present
+if len(os.listdir()) > 1:
+    new_assets_path = config['site_root_path'] + '/assets/' + next_post_title
+    os.mkdir(new_assets_path)
+
+
 post_fm = []
 
 for item in os.listdir():
@@ -60,6 +76,9 @@ os.rmdir('./' + next_post_title)
 
 os.chdir(config['site_root_path'])
 os.system('/usr/local/bin/jekyll build')
+if 'preview' in config:
+    os.system('/usr/local/bin/jekyll serve --host 0.0.0.0')
+    sleep(int(config['preview'])) 
 
 
 if 'SFTP' in config:
