@@ -25,13 +25,16 @@ for directory in directories:
         level = int(directory[8:10])
         if(level > p_level):
             priority = directory[11:]
+            p_level = level
 
 if priority is not None:
     next_post_title = priority
+    priority = "PRIORITY" + str(p_level) + " " + next_post_title
 else:
     next_post_title = random.choice(directories)
+    priority = ""
 
-os.chdir('./' + next_post_title)
+os.chdir('./' + priority + next_post_title)
 
 new_post_path = config['site_root_path'] + '/_posts/' + dates
 
@@ -72,7 +75,7 @@ for item in os.listdir():
         os.rename('./' + item, new_assets_path + '/' + item)
 
 os.chdir('../')
-os.rmdir('./' + next_post_title)
+os.rmdir('./' + priority + next_post_title)
 
 os.chdir(config['site_root_path'])
 os.system('/usr/local/bin/jekyll build')
